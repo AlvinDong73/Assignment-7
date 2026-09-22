@@ -9,6 +9,7 @@ public class Assignment6 {
         // Inititaes variables and objects
         ArrayList<VideoGame> gameLibrary = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
+
         String title, publisher, isOnline;
         double versionNumber;
         int releaseYear, numGames;
@@ -39,7 +40,7 @@ public class Assignment6 {
                 System.out.print("Enter the release year: ");
                 releaseYear = scanner.nextInt();
                 scanner.nextLine(); // Consume newline
-                gameLibrary.add(new RPG(title, publisher, releaseYear));
+                gameLibrary.add(new SinglePlayerGame(title, publisher, releaseYear));
             }
         }
 
@@ -50,5 +51,7 @@ public class Assignment6 {
         for (VideoGame game : gameLibrary) {
             System.out.println(game);
         }
+
+
     }
 }

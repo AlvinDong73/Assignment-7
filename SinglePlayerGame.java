@@ -1,7 +1,7 @@
-public class RPG extends VideoGame {
+public class SinglePlayerGame extends VideoGame {
     int releaseYear;
 
-    public RPG(String gameTitle, String gamePublisher, int gameReleaseYear) {
+    public SinglePlayerGame(String gameTitle, String gamePublisher, int gameReleaseYear) {
         super(gameTitle, gamePublisher);
         releaseYear = gameReleaseYear;
     }
