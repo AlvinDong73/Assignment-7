@@ -17,4 +17,9 @@ public class SinglePlayerGame extends VideoGame {
     public String toString() {
         return super.toString() + " (" + releaseYear + ")";
     }
+
+    @Override
+    public String serialize() {
+        return "S,%s,%s,%d".formatted(getTitle(), getPublisher(), releaseYear);
+    }
 }

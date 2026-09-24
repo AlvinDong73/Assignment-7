@@ -17,4 +17,9 @@ public class OnlineGame extends VideoGame {
     public String toString() {
         return super.toString() + ", Version: " + versionNumber;
     }
+
+    @Override
+    public String serialize() {
+        return "O,%s,%s,%d".formatted(getTitle(), getPublisher(), versionNumber);
+    }
 }

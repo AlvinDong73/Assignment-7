@@ -1,5 +1,5 @@
-public class VideoGame {
-    String title, publisher;
+public abstract class VideoGame {
+    protected String title, publisher;
 
     public VideoGame(String gameTitle, String gamePublisher) {
         title = gameTitle;
@@ -25,4 +25,11 @@ public class VideoGame {
     public String toString() {
         return title + ", Published by: " + publisher;
     }
+
+    public boolean equals(Object other) {
+        VideoGame casted = (VideoGame) other;
+        return casted != null && casted.publisher.equals(publisher) && casted.getTitle().equals(title);
+    }
+
+    public abstract String serialize();
 }
