@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Assignment6 {
@@ -46,11 +47,11 @@ public class Assignment6 {
         while (!shouldExit) {
             System.out.print(
                 """
+                Game Library Manager
                 1: Show Game Library
                 2: Add Game
                 3: Remove Game
-                4: Modify Game
-                5: Quit
+                4: Quit
                 """
             );
             System.out.print("> ");
@@ -61,18 +62,76 @@ public class Assignment6 {
                     if (gameLibrary.isEmpty()) {
                         System.out.println("(No games in library)");
                     } else {
-                        gameLibrary.forEach(g -> System.out.println(g));
+                        for (int i = 0; i < gameLibrary.size(); i++) {
+                            System.out.printf("%d: %s\n", i + 1, gameLibrary.get(i).toString());
+                        }
                     }
                     System.out.print("> (Press Enter to continue)");
                     userInput.nextLine();
                     break;
                 case "2":
+                    VideoGame game = createVideoGameFromInput(userInput);
+                    if (gameLibrary.contains(game)) {
+                        boolean proceed = false;
+                        boolean shouldDelete = false;
+                        while (!proceed) {
+                            System.out.print(
+                                """
+                                Are you sure you want to overwrite a
+                                preexisting game in your library?
+                                1: Yes
+                                2: No
+                                """
+                            );
+                            System.out.print("> ");
+                            String response = userInput.nextLine();
+                            if (response.equals("1")) {
+                                proceed = true;
+                                shouldDelete = true;
+                            } else if (response.equals("2")) {
+                                proceed = true;
+                            }
+                        }
+                        if (shouldDelete) {
+                            gameLibrary.remove(game);
+                            gameLibrary.add(game);
+                        }
+                    } else {
+                        gameLibrary.add(game);
+                    }
+                    updateLibrary(libraryData, gameLibrary);
                     break;
                 case "3":
+                    System.out.println("Delete a selected game from your library:");
+                    if (gameLibrary.isEmpty()) {
+                        System.out.println("(No games in library to delete)");
+                        System.out.print("> (Press Enter to continue)");
+                        userInput.nextLine();
+                    } else {
+                        for (int i = 0; i < gameLibrary.size(); i++) {
+                            System.out.printf("%d: %s\n", i + 1, gameLibrary.get(i).toString());
+                        }
+                        System.out.println("(Type \"exit\" to cancel deletion)");
+                        boolean proceed = false;
+                        while (!proceed) {
+                            String response = userInput.nextLine();
+                            if (response.equalsIgnoreCase("exit")) {
+                                proceed = true;
+                            } else {
+                                try {
+                                    int index = Integer.parseInt(response);
+                                    if (index >= 1 && index <= gameLibrary.size()) {
+                                        proceed = true;
+                                        gameLibrary.remove(index - 1);
+                                    }
+                                } catch (NumberFormatException e) {
+                                }
+                            }
+                        }
+                        updateLibrary(libraryData, gameLibrary);
+                    }
                     break;
                 case "4":
-                    break;
-                case "5":
                     updateLibrary(libraryData, gameLibrary);
                     shouldExit = true;
                     break;
@@ -133,6 +192,48 @@ public class Assignment6 {
         } catch (FileNotFoundException e) {
             System.out.println("Something went wrong with updating your library.");
             System.out.println("Aborting library update.");
+        }
+    }
+
+    public static VideoGame createVideoGameFromInput(Scanner input) {
+        boolean shouldAdvance = false;
+        boolean isSingleplayer = false;
+        while (!shouldAdvance) {
+            System.out.print(
+                """
+                Is the game a multiplayer or single player game?
+                1: Multiplayer
+                2: Single Player
+                """
+            );
+            System.out.print("> ");
+            String response = input.nextLine();
+            if (response.equals("1")) {
+                shouldAdvance = true;
+            } else if (response.equals("2")) {
+                shouldAdvance = true;
+                isSingleplayer = true;
+            }
+        }
+        System.out.println("What is the title of the game?");
+        String title = input.nextLine();
+        System.out.println("Who is the publisher of the game?");
+        String publisher = input.nextLine();
+        while (true) {
+            try {
+                if (isSingleplayer) {
+                    System.out.println("When was the game released?");
+                    int year = input.nextInt();
+                    input.nextLine();
+                    return new SinglePlayerGame(title, publisher, year);
+                } else {
+                    System.out.println("What is the game's version?");
+                    double version = input.nextDouble();
+                    input.nextLine();
+                    return new OnlineGame(title, publisher, version);
+                }
+            } catch (InputMismatchException e) {
+            }
         }
     }
 }

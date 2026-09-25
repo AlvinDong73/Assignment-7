@@ -20,6 +20,6 @@ public class OnlineGame extends VideoGame {
 
     @Override
     public String serialize() {
-        return "O,%s,%s,%d".formatted(getTitle(), getPublisher(), versionNumber);
+        return "O,%s,%s,%f".formatted(getTitle(), getPublisher(), versionNumber);
     }
 }
