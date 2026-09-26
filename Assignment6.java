@@ -13,12 +13,16 @@ public class Assignment6 {
         // Inititaes variables and objects
         ArrayList<VideoGame> gameLibrary = new ArrayList<>();
         Scanner userInput = new Scanner(System.in);
+
+        // New library file object
         File libraryData = new File("library.csv");
         try {
             int invalid = 0;
+            // Attempts to read from the library file
             Scanner libraryScanner = new Scanner(libraryData);
             while (libraryScanner.hasNextLine()) {
                 try {
+                    // Reconstructs VideoGames from library.csv
                     String[] currentRow = libraryScanner.nextLine().split(",");
                     if (currentRow[0].equals("S")) {
                         gameLibrary.add(
@@ -26,6 +30,7 @@ public class Assignment6 {
                     } else if (currentRow[0].equals("O")) {
                         gameLibrary.add(new OnlineGame(currentRow[1], currentRow[2], Double.valueOf(currentRow[3])));
                     } else {
+                        // Simply do not create VideoGames from invalid rows of data in the csv file
                         invalid++;
                     }
                 } catch (NumberFormatException e) {
@@ -35,15 +40,18 @@ public class Assignment6 {
             if (invalid > 0) {
                 System.out.printf("%d invalid library entr%s found.\n", invalid, invalid == 1 ? "y" : "ies");
                 System.out.println("Removing invalid entries...");
-                updateLibrary(libraryData, gameLibrary);
             }
             libraryScanner.close();
         } catch (FileNotFoundException e) {
+            // Only reached if the user did not have a library.csv file prior to running the program
             System.out.println("Initializing empty library...");
         }
 
+        updateLibrary(libraryData, gameLibrary);
+
         boolean shouldExit = false;
 
+        // main loop
         while (!shouldExit) {
             System.out.print(
                 """
@@ -56,8 +64,9 @@ public class Assignment6 {
             );
             System.out.print("> ");
             String input = userInput.nextLine();
+            // each case represents a specific operation
             switch (input) {
-                case "1":
+                case "1": // View
                     System.out.println("Games in library:");
                     if (gameLibrary.isEmpty()) {
                         System.out.println("(No games in library)");
@@ -69,7 +78,7 @@ public class Assignment6 {
                     System.out.print("> (Press Enter to continue)");
                     userInput.nextLine();
                     break;
-                case "2":
+                case "2": // Add
                     VideoGame game = createVideoGameFromInput(userInput);
                     if (gameLibrary.contains(game)) {
                         boolean proceed = false;
@@ -101,7 +110,7 @@ public class Assignment6 {
                     }
                     updateLibrary(libraryData, gameLibrary);
                     break;
-                case "3":
+                case "3": // Delete
                     System.out.println("Delete a selected game from your library:");
                     if (gameLibrary.isEmpty()) {
                         System.out.println("(No games in library to delete)");
@@ -131,14 +140,16 @@ public class Assignment6 {
                         updateLibrary(libraryData, gameLibrary);
                     }
                     break;
-                case "4":
+                case "4": // Exit
                     updateLibrary(libraryData, gameLibrary);
                     shouldExit = true;
                     break;
-                default:
+                default: // If the user selects a nonexistent choice, send them back to the original prompt
                     break;
             }
         }
+        
+        userInput.close();
 
         // String title, publisher, isOnline;
         // double versionNumber;
@@ -174,8 +185,6 @@ public class Assignment6 {
         // }
         // }
 
-        userInput.close();
-
         // Displays all games in the gameLibrary
         // System.out.println("\nGames in your library:");
         // for (VideoGame game : gameLibrary) {
@@ -183,7 +192,12 @@ public class Assignment6 {
         // }
 
     }
-
+    /**
+     * A convenience method for updating the list of games in the user's
+     * library.csv file.
+     * @param file a File object pointing to library.csv
+     * @param games the list of all VideoGames that should be stored.
+     */
     public static void updateLibrary(File file, ArrayList<VideoGame> games) {
         try {
             PrintWriter writer = new PrintWriter(file);
@@ -195,6 +209,12 @@ public class Assignment6 {
         }
     }
 
+    /**
+     * Given a Scanner reading from System.in, produces a VideoGame based
+     * on answers given by the user.
+     * @param input a Scanner that is receiving user input from System.in
+     * @return a VideoGame with data according to what the user specifies
+     */
     public static VideoGame createVideoGameFromInput(Scanner input) {
         boolean shouldAdvance = false;
         boolean isSingleplayer = false;

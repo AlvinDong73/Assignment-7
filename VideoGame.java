@@ -26,10 +26,13 @@ public abstract class VideoGame {
         return title + ", Published by: " + publisher;
     }
 
+    // Two games are equal if they have the same publisher and title.
     public boolean equals(Object other) {
         VideoGame casted = (VideoGame) other;
         return casted != null && casted.publisher.equals(publisher) && casted.getTitle().equals(title);
     }
 
+    // All subclasses must have a concise string representation that can be saved
+    // to a file in a way where the original data can be reconstructed.
     public abstract String serialize();
 }
