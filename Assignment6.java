@@ -1,6 +1,8 @@
 // Dan Murlaga
 // Written with assistance from Github Copilot
 
+// Modified by Alvin Dong
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
