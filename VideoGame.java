@@ -1,13 +1,30 @@
 public abstract class VideoGame {
-    protected String title, publisher;
+    private String title, publisher;
+    private double hoursPlayed;
 
     public VideoGame(String gameTitle, String gamePublisher) {
         title = gameTitle;
         publisher = gamePublisher;
+        hoursPlayed = 0;
+    }
+
+    public VideoGame(String gameTitle, String gamePublisher, double hours) {
+        title = gameTitle;
+        publisher = gamePublisher;
+        hoursPlayed = hours;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public double getHoursPlayed() {
+        return hoursPlayed;
+    }
+
+    public void play(double hours) {
+        hoursPlayed += hours;
+        System.out.printf("Playing %s for %.1f hours", title, hours);
     }
 
     public String getPublisher() {
@@ -23,7 +40,7 @@ public abstract class VideoGame {
     }
 
     public String toString() {
-        return title + ", Published by: " + publisher;
+        return title + " (played for " + hoursPlayed + " hours), Published by: " + publisher;
     }
 
     // Two games are equal if they have the same publisher and title.

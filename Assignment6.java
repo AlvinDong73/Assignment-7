@@ -26,9 +26,9 @@ public class Assignment6 {
                     String[] currentRow = libraryScanner.nextLine().split(",");
                     if (currentRow[0].equals("S")) {
                         gameLibrary.add(
-                                new SinglePlayerGame(currentRow[1], currentRow[2], Integer.valueOf(currentRow[3])));
+                                new SinglePlayerGame(currentRow[1], currentRow[2], Double.valueOf(currentRow[3]), Integer.valueOf(currentRow[4])));
                     } else if (currentRow[0].equals("O")) {
-                        gameLibrary.add(new OnlineGame(currentRow[1], currentRow[2], Double.valueOf(currentRow[3])));
+                        gameLibrary.add(new OnlineGame(currentRow[1], currentRow[2], Double.valueOf(currentRow[3]), Double.valueOf(currentRow[4])));
                     } else {
                         // Simply do not create VideoGames from invalid rows of data in the csv file
                         invalid++;
@@ -59,7 +59,8 @@ public class Assignment6 {
                 1: Show Game Library
                 2: Add Game
                 3: Remove Game
-                4: Quit
+                4: Play Game
+                5: Quit
                 """
             );
             System.out.print("> ");
@@ -140,7 +141,52 @@ public class Assignment6 {
                         updateLibrary(libraryData, gameLibrary);
                     }
                     break;
-                case "4": // Exit
+                case "4":
+                    System.out.println("Play a selected game from your library:");
+                    if (gameLibrary.isEmpty()) {
+                        System.out.println("(No games in library to play)");
+                        System.out.print("> (Press Enter to continue)");
+                        userInput.nextLine();
+                    } else {
+                        for (int i = 0; i < gameLibrary.size(); i++) {
+                            System.out.printf("%d: %s\n", i + 1, gameLibrary.get(i).toString());
+                        }
+                        int index = -1;
+                        System.out.println("(Type \"exit\" to cancel)");
+                        boolean proceed = false;
+                        while (!proceed) {
+                            String response = userInput.nextLine();
+                            if (response.equalsIgnoreCase("exit")) {
+                                proceed = true;
+                            } else {
+                                try {
+                                    index = Integer.parseInt(response);
+                                    if (index >= 1 && index <= gameLibrary.size()) {
+                                        proceed = true;
+                                        
+                                    }
+                                } catch (NumberFormatException e) {
+                                }
+                            }
+                        }
+                        index--; // correct the index
+                        proceed = false;
+                        while (!proceed) {
+                            System.out.println("How many hours?");
+                            String response = userInput.nextLine();
+                            try {
+                                double hrs = Double.parseDouble(response);
+                                if (hrs > 0) {
+                                    gameLibrary.get(index).play(hrs);
+                                    proceed = true;
+                                }
+                            } catch (NumberFormatException e) {
+                            }
+                        }
+                        updateLibrary(libraryData, gameLibrary);
+                    }
+                    break;
+                case "5": // Exit
                     updateLibrary(libraryData, gameLibrary);
                     shouldExit = true;
                     break;

@@ -6,6 +6,11 @@ public class SinglePlayerGame extends VideoGame {
         releaseYear = gameReleaseYear;
     }
 
+    public SinglePlayerGame(String gameTitle, String gamePublisher, double hours, int gameReleaseYear) {
+        super(gameTitle, gamePublisher, hours);
+        releaseYear = gameReleaseYear;
+    }
+
     public int getReleaseYear() {
         return releaseYear;
     }
@@ -20,6 +25,6 @@ public class SinglePlayerGame extends VideoGame {
 
     @Override
     public String serialize() {
-        return "S,%s,%s,%d".formatted(getTitle(), getPublisher(), releaseYear);
+        return "S,%s,%s,%f,%d".formatted(getTitle(), getPublisher(), getHoursPlayed(), releaseYear);
     }
 }

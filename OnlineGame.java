@@ -6,6 +6,11 @@ public class OnlineGame extends VideoGame {
         versionNumber = gameVersionNumber;
     }
 
+    public OnlineGame(String gameTitle, String gamePublisher, double hours, double gameVersionNumber) {
+        super(gameTitle, gamePublisher, hours);
+        versionNumber = gameVersionNumber;
+    }
+
     public double getVersionNumber() {
         return versionNumber;
     }
@@ -20,6 +25,6 @@ public class OnlineGame extends VideoGame {
 
     @Override
     public String serialize() {
-        return "O,%s,%s,%f".formatted(getTitle(), getPublisher(), versionNumber);
+        return "O,%s,%s,%f,%f".formatted(getTitle(), getPublisher(), getHoursPlayed(), versionNumber);
     }
 }
