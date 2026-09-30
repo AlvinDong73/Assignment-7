@@ -45,8 +45,12 @@ public abstract class VideoGame {
 
     // Two games are equal if they have the same publisher and title.
     public boolean equals(Object other) {
-        VideoGame casted = (VideoGame) other;
-        return casted != null && casted.publisher.equals(publisher) && casted.getTitle().equals(title);
+        if (other instanceof VideoGame) {
+            VideoGame casted = (VideoGame) other;
+            return casted != null && casted.publisher.equals(publisher) && casted.getTitle().equals(title);
+        } else {
+            return false;
+        }
     }
 
     // All subclasses must have a concise string representation that can be saved
