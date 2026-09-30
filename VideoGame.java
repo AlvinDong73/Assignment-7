@@ -47,7 +47,7 @@ public abstract class VideoGame {
     public boolean equals(Object other) {
         if (other instanceof VideoGame) {
             VideoGame casted = (VideoGame) other;
-            return casted != null && casted.publisher.equals(publisher) && casted.getTitle().equals(title);
+            return casted.publisher.equals(publisher) && casted.getTitle().equals(title);
         } else {
             return false;
         }
